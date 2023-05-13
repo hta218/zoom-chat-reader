@@ -1,9 +1,11 @@
 (function () {
   console.log("App running...");
   let dropTarget = document.getElementById("drop_target");
+  let content = document.getElementById("content");
   let fileInput = document.getElementById("file_input");
   let fileName = document.getElementById("file_name");
   let tableBody = document.getElementById("table_body");
+  let copyButton = document.getElementById("copy_button");
 
   function readTextFile(event) {
     event.preventDefault();
@@ -14,6 +16,7 @@
     fileName.textContent = file.name;
     let reader = new FileReader();
     reader.onload = () => {
+      content.classList.remove("hidden");
       let text = reader.result;
       let lines = text.split("\n");
       let time = "";
@@ -30,14 +33,10 @@
         if (time && message) {
           let phoneNumber = getPhoneNumber(message);
           let address = message.replace(phoneNumber, "");
-          // console.log(
-          //   `${index}. Time: ${time}. Address: ${address}. Phone: ${phoneNumber}`
-          // );
-          // time = "";
-          // message = "";
           let row = document.createElement("tr");
           row.innerHTML = `
 						<td class="border px-6 py-2">${index}</td>
+						<td class="border px-6 py-2">${time}</td>
 						<td class="border px-6 py-2">${address}</td>
 						<td class="border px-6 py-2">${phoneNumber}</td>
 					`;
@@ -56,6 +55,21 @@
     }
     return phoneNumber || "N/A";
   }
+
+  copyButton.addEventListener("click", () => {
+    copyButton.innerText = "Copied!";
+    copyButton.classList.add("cursor-not-allowed", "opacity-50");
+    setTimeout(() => {
+      copyButton.innerText = "Copy to Clipboard 🗒️";
+      copyButton.classList.remove("cursor-not-allowed", "opacity-50");
+    }, 2000);
+
+    let tableRows = [...tableBody.childNodes].map((row) =>
+      row.innerText.trim()
+    );
+    let tableString = tableRows.join("\n");
+    navigator.clipboard.writeText(tableString);
+  });
 
   dropTarget.addEventListener("click", () => {
     fileInput.click();
