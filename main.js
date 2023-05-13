@@ -20,27 +20,35 @@
       let text = reader.result;
       let lines = text.split("\n");
       let time = "";
+      let from = "";
       let message = "";
       let index = 1;
       lines.forEach((line) => {
         line = line.replace(/[\t\r]/g, " ").trim();
         if (line.match(/^\d{2}:\d{2}:\d{2}/)) {
           time = line.slice(0, 8);
+          from = line
+            .replace(time, "")
+            .replace(/to  Everyone:/, "")
+            .replace(/From/, "")
+            .trim();
           message = "";
         } else {
           message += line + " ";
         }
-        if (time && message) {
+        if (time && message && message.length > 5) {
           let phoneNumber = getPhoneNumber(message);
           let address = message.replace(phoneNumber, "");
           let row = document.createElement("tr");
           row.innerHTML = `
 						<td class="border px-6 py-2">${index}</td>
 						<td class="border px-6 py-2">${time}</td>
+						<td class="border px-6 py-2">${from}</td>
 						<td class="border px-6 py-2">${address}</td>
 						<td class="border px-6 py-2">${phoneNumber}</td>
 					`;
           tableBody.appendChild(row);
+          from = "";
           index++;
         }
       });
@@ -60,7 +68,7 @@
     copyButton.innerText = "Copied!";
     copyButton.classList.add("cursor-not-allowed", "opacity-50");
     setTimeout(() => {
-      copyButton.innerText = "Copy to Clipboard 🗒️";
+      copyButton.innerText = "Copy 🗒️";
       copyButton.classList.remove("cursor-not-allowed", "opacity-50");
     }, 2000);
 
