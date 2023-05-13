@@ -35,12 +35,13 @@
           // );
           // time = "";
           // message = "";
-          tableBody.innerHTML += `
-            <tr>
-              <td class="border px-6 py-2">${address}</td>
-              <td class="border px-6 py-2">${phoneNumber}</td>
-            </tr>
-          `;
+          let row = document.createElement("tr");
+          row.innerHTML = `
+						<td class="border px-6 py-2">${index}</td>
+						<td class="border px-6 py-2">${address}</td>
+						<td class="border px-6 py-2">${phoneNumber}</td>
+					`;
+          tableBody.appendChild(row);
           index++;
         }
       });
@@ -49,13 +50,11 @@
   }
 
   function getPhoneNumber(text) {
-    const phoneRegex1 = /\d{10}/g; // 10 digits together
-    let phoneNumber = text.match(phoneRegex1);
+    let phoneNumber = text.match(/\d{10}/g);
     if (!phoneNumber) {
-      const phoneRegex2 = /^(\d{3})\D*(\d{4})$/g;
-      phoneNumber = text.match(phoneRegex2);
+      phoneNumber = text.match(/^(\d{3})\D*(\d{4})$/g);
     }
-    return phoneNumber;
+    return phoneNumber || "N/A";
   }
 
   dropTarget.addEventListener("click", () => {
