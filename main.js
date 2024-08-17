@@ -38,18 +38,21 @@
         }
         if (time && message && message.length > 5) {
           let phoneNumber = getPhoneNumber(message);
-          let address = message.replace(phoneNumber, "");
-          let row = document.createElement("tr");
-          row.innerHTML = `
-						<td class="border px-6 py-2">${index}</td>
-						<td class="border px-6 py-2">${time}</td>
-						<td class="border px-6 py-2">${from}</td>
-						<td class="border px-6 py-2">${address}</td>
-						<td class="border px-6 py-2">${phoneNumber}</td>
-					`;
-          tableBody.appendChild(row);
-          from = "";
-          index++;
+          let isExisted = document.querySelector(`[data-phone-number="${phoneNumber}"]`)
+          if (!isExisted) {
+            let address = message.replace(phoneNumber, "");
+            let row = document.createElement("tr");
+            row.innerHTML = `
+          		<td class="border px-6 py-2">${index}</td>
+          		<td class="border px-6 py-2">${time}</td>
+          		<td class="border px-6 py-2">${from}</td>
+          		<td class="border px-6 py-2">${address}</td>
+          		<td class="border px-6 py-2" data-phone-number="${phoneNumber}">${phoneNumber}</td>
+          	`;
+            tableBody.appendChild(row);
+            from = "";
+            index++;
+          }
         }
       });
     };
@@ -61,7 +64,7 @@
     if (!phoneNumber) {
       phoneNumber = text.match(/^(\d{3})\D*(\d{4})$/g);
     }
-    return phoneNumber || "N/A";
+    return phoneNumber?.trim() || "N/A";
   }
 
   copyButton.addEventListener("click", () => {
