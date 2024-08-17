@@ -47,7 +47,7 @@
           		<td class="border px-6 py-2">${time}</td>
           		<td class="border px-6 py-2">${from}</td>
           		<td class="border px-6 py-2">${address}</td>
-          		<td class="border px-6 py-2" data-phone-number="${phoneNumber}">${phoneNumber}</td>
+          		<td class="border px-6 py-2" data-phone-number="${phoneNumber.trim()}">${phoneNumber}</td>
           	`;
             tableBody.appendChild(row);
             from = "";
@@ -64,7 +64,7 @@
     if (!phoneNumber) {
       phoneNumber = text.match(/^(\d{3})\D*(\d{4})$/g);
     }
-    return phoneNumber?.trim() || "N/A";
+    return phoneNumber || "N/A";
   }
 
   copyButton.addEventListener("click", () => {
