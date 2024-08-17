@@ -60,11 +60,8 @@
   }
 
   function getPhoneNumber(text) {
-    let phoneNumber = text.match(/\d{10}/g);
-    if (!phoneNumber) {
-      phoneNumber = text.match(/^(\d{3})\D*(\d{4})$/g);
-    }
-    return phoneNumber || "N/A";
+    let phoneNumber = text.match(/\d{10}/g)?.[0] || text.match(/^(\d{3})\D*(\d{4})$/g)?.[0] || 'N/A'
+    return phoneNumber;
   }
 
   copyButton.addEventListener("click", () => {
